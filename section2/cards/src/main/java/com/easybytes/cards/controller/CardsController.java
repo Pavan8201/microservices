@@ -1,4 +1,4 @@
-package com.eazybytes.cards.controller;
+package com.easybytes.cards.controller;
 
 import com.easybytes.cards.constants.CardsConstants;
 import com.easybytes.cards.dto.CardsDto;
