@@ -1,0 +1,17 @@
+$kind: http-request
+name: Create Account
+method: POST
+url: '{{baseUrl}}/api/create'
+order: 1000
+description: REST API to create new Customer & Account inside EazyBank
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Eazy Bytes",
+      "email": "tutor@eazybytes.com",
+      "mobileNumber": "9345432123"
+    }

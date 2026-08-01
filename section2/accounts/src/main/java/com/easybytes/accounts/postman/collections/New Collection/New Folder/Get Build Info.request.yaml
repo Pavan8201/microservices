@@ -1,0 +1,6 @@
+$kind: http-request
+name: Get Build Info
+method: GET
+url: '{{baseUrl}}/api/build-info'
+order: 5000
+description: Get Build information deployed into accounts microservice

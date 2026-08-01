@@ -1,0 +1,9 @@
+$kind: http-request
+name: Create Card
+method: POST
+url: '{{cardsBaseUrl}}/api/create'
+order: 1000
+description: REST API to create new Card inside EazyBank
+queryParams:
+  - key: mobileNumber
+    value: '9345432123'

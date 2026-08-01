@@ -1,0 +1,9 @@
+$kind: http-request
+name: Delete Account Details
+method: DELETE
+url: '{{baseUrl}}/api/delete'
+order: 4000
+description: REST API to delete Customer & Account details based on a mobile number
+queryParams:
+  - key: mobileNumber
+    value: '9345432123'

@@ -1,0 +1,9 @@
+$kind: http-request
+name: Delete Loan Details
+method: DELETE
+url: '{{loansBaseUrl}}/api/delete'
+order: 4000
+description: REST API to delete Loan details based on a mobile number
+queryParams:
+  - key: mobileNumber
+    value: '9345432123'

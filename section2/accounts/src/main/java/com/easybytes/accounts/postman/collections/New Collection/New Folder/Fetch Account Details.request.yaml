@@ -1,0 +1,9 @@
+$kind: http-request
+name: Fetch Account Details
+method: GET
+url: '{{baseUrl}}/api/fetch'
+order: 2000
+description: REST API to fetch Customer & Account details based on a mobile number
+queryParams:
+  - key: mobileNumber
+    value: '9345432123'
