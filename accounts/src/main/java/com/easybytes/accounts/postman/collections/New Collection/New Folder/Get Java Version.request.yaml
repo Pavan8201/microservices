@@ -1,0 +1,6 @@
+$kind: http-request
+name: Get Java Version
+method: GET
+url: '{{baseUrl}}/api/java-version'
+order: 6000
+description: Get Java versions details that is installed into accounts microservice

@@ -1,0 +1,20 @@
+<div class="shell">
+  <aside class="rail">
+    <a class="brand" routerLink="/accounts">
+      <span class="brand-mark" aria-hidden="true">VB</span>
+      <span class="brand-copy">
+        <span class="brand-name">VanBank</span>
+        <span class="brand-kicker">Private desk</span>
+      </span>
+    </a>
+    <nav class="nav" aria-label="Services">
+      <a routerLink="/accounts" routerLinkActive="active"><span>01</span>Accounts</a>
+      <a routerLink="/cards" routerLinkActive="active"><span>02</span>Cards</a>
+      <a routerLink="/loans" routerLinkActive="active"><span>03</span>Loans</a>
+    </nav>
+    <p class="rail-note">Customer records stay with the local accounts, cards, and loans services.</p>
+  </aside>
+  <main class="canvas">
+    <router-outlet />
+  </main>
+</div>

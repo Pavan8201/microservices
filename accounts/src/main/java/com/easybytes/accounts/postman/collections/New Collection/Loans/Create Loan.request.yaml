@@ -1,0 +1,9 @@
+$kind: http-request
+name: Create Loan
+method: POST
+url: '{{loansBaseUrl}}/api/create'
+order: 1000
+description: REST API to create new loan inside EazyBank
+queryParams:
+  - key: mobileNumber
+    value: '9345432123'

@@ -1,0 +1,9 @@
+$kind: http-request
+name: Fetch Loan Details
+method: GET
+url: '{{loansBaseUrl}}/api/fetch'
+order: 2000
+description: REST API to fetch loan details based on a mobile number
+queryParams:
+  - key: mobileNumber
+    value: '9345432123'

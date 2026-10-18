@@ -1,0 +1,159 @@
+<section class="page">
+  <header class="page-head">
+    <p class="eyebrow">Cards</p>
+    <h1>Cards</h1>
+    <p class="intro">
+      Issue a card with a mobile number. The service chooses the card number, type, and limit.
+      Retrieve that number to change the amounts or close the card.
+    </p>
+  </header>
+
+  @if (busy()) {
+    <p class="busy-note" role="status">Working with the cards service…</p>
+  }
+  @if (notice(); as note) {
+    <p class="banner" [class.banner-error]="note.tone === 'error'" role="status">{{ note.text }}</p>
+  }
+
+  <div class="desk">
+    <article class="panel">
+      <p class="kicker">Issue</p>
+      <h2>New card</h2>
+      <form class="stack" [formGroup]="createForm" (ngSubmit)="create()">
+        <mat-form-field appearance="outline">
+          <mat-label>Mobile number</mat-label>
+          <input matInput formControlName="mobileNumber" inputmode="numeric" maxlength="10" autocomplete="off" />
+          @if (createForm.controls.mobileNumber.touched && createForm.controls.mobileNumber.invalid) {
+            <mat-error>Enter a 10-digit mobile number.</mat-error>
+          }
+        </mat-form-field>
+        <button mat-flat-button color="primary" type="submit" [disabled]="busy()">Create card</button>
+      </form>
+    </article>
+
+    <article class="panel">
+      <p class="kicker">Retrieve</p>
+      <h2>Find by mobile</h2>
+      <p class="quiet">The card face and the limit figures appear together.</p>
+      <form class="stack" [formGroup]="findForm" (ngSubmit)="fetch()">
+        <mat-form-field appearance="outline">
+          <mat-label>Mobile number</mat-label>
+          <input matInput formControlName="mobileNumber" inputmode="numeric" maxlength="10" autocomplete="off" />
+          @if (findForm.controls.mobileNumber.touched && findForm.controls.mobileNumber.invalid) {
+            <mat-error>Enter a 10-digit mobile number.</mat-error>
+          }
+        </mat-form-field>
+        <button mat-flat-button color="primary" type="submit" [disabled]="busy()">Fetch card</button>
+      </form>
+    </article>
+  </div>
+
+  @if (record(); as card) {
+    <article class="instrument">
+      <div class="hero">
+        <div class="plastic">
+          <div class="plastic-top">
+            <span>VanBank</span>
+            <svg class="chip" viewBox="0 0 36 28" aria-hidden="true">
+              <rect width="36" height="28" rx="4" fill="#e4c98a" />
+              <path d="M0 10h36M0 18h36M12 0v28M24 0v28" stroke="#9a7438" />
+            </svg>
+          </div>
+          <p class="pan">{{ groupDigits(card.cardNumber) }}</p>
+          <strong>{{ card.cardType }}</strong>
+        </div>
+        <div>
+          <p class="eyebrow">Spending</p>
+          <dl class="figures">
+            <div>
+              <dt>Limit</dt>
+              <dd>{{ format(card.totalLimit) }}</dd>
+            </div>
+            <div>
+              <dt>Used</dt>
+              <dd>{{ format(card.amountUsed) }}</dd>
+            </div>
+            <div>
+              <dt>Available</dt>
+              <dd>{{ format(card.availableAmount) }}</dd>
+            </div>
+          </dl>
+          <div class="meter" aria-hidden="true">
+            <span [style.width.%]="share(card.amountUsed, card.totalLimit)"></span>
+          </div>
+          <p class="meta">{{ share(card.amountUsed, card.totalLimit) }}% of the limit used</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="panel maintain">
+      <p class="kicker">Maintain</p>
+      <h2>Update this card</h2>
+      <p class="quiet">The service stores the amounts you send. It does not recalculate the available balance.</p>
+      <form class="grid" [formGroup]="editForm" (ngSubmit)="update()">
+        <mat-form-field appearance="outline">
+          <mat-label>Mobile number</mat-label>
+          <input matInput formControlName="mobileNumber" inputmode="numeric" maxlength="10" />
+          @if (editForm.controls.mobileNumber.touched && editForm.controls.mobileNumber.invalid) {
+            <mat-error>Enter a 10-digit mobile number.</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Card number</mat-label>
+          <input matInput formControlName="cardNumber" inputmode="numeric" maxlength="12" />
+          @if (editForm.controls.cardNumber.touched && editForm.controls.cardNumber.invalid) {
+            <mat-error>Card number must be 12 digits.</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Card type</mat-label>
+          <input matInput formControlName="cardType" maxlength="40" />
+          @if (editForm.controls.cardType.touched && editForm.controls.cardType.invalid) {
+            <mat-error>Card type is required.</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Total limit</mat-label>
+          <input matInput type="number" formControlName="totalLimit" min="1" step="1" />
+          @if (editForm.controls.totalLimit.touched && editForm.controls.totalLimit.invalid) {
+            <mat-error>Total limit must be a whole number greater than zero.</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Amount used</mat-label>
+          <input matInput type="number" formControlName="amountUsed" min="0" step="1" />
+          @if (editForm.controls.amountUsed.touched && editForm.controls.amountUsed.invalid) {
+            <mat-error>Amount used must be a whole number, zero or more.</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Available amount</mat-label>
+          <input matInput type="number" formControlName="availableAmount" min="0" step="1" />
+          @if (editForm.controls.availableAmount.touched && editForm.controls.availableAmount.invalid) {
+            <mat-error>Available amount must be a whole number, zero or more.</mat-error>
+          }
+        </mat-form-field>
+        <button mat-flat-button color="primary" type="submit" [disabled]="busy()">Save changes</button>
+      </form>
+      <div class="danger-zone">
+        @if (!confirmDelete()) {
+          <button mat-stroked-button type="button" class="danger-button" (click)="confirmDelete.set(true)" [disabled]="busy()">
+            Delete card
+          </button>
+        } @else {
+          <p>Delete this card? This cannot be undone.</p>
+          <div class="row">
+            <button mat-stroked-button type="button" (click)="confirmDelete.set(false)" [disabled]="busy()">Cancel</button>
+            <button mat-flat-button type="button" class="danger-button" (click)="remove()" [disabled]="busy()">Delete</button>
+          </div>
+        }
+      </div>
+    </article>
+  } @else {
+    <section class="waiting">
+      <p class="eyebrow">Nothing open</p>
+      <h2>A card appears here after you issue or fetch one.</h2>
+      <p class="quiet">The card number and limit are assigned by the service.</p>
+    </section>
+  }
+</section>

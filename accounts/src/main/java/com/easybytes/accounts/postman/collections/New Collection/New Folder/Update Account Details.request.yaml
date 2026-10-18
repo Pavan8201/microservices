@@ -1,0 +1,22 @@
+$kind: http-request
+name: Update Account Details
+method: PUT
+url: '{{baseUrl}}/api/update'
+order: 3000
+description: REST API to update Customer & Account details based on account number
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Eazy Bytes",
+      "email": "tutor@eazybytes.com",
+      "mobileNumber": "9345432123",
+      "accountsDto": {
+        "accountNumber": 3454433243,
+        "accountType": "Savings",
+        "branchAddress": "123 NewYork"
+      }
+    }

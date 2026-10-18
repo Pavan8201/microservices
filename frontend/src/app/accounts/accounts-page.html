@@ -1,0 +1,152 @@
+<section class="page">
+  <header class="page-head">
+    <p class="eyebrow">Accounts</p>
+    <h1>Customers and accounts</h1>
+    <p class="intro">
+      Open a customer with a name, email, and mobile number. The service assigns the savings account.
+      Retrieve that number when you want to change or close it.
+    </p>
+  </header>
+
+  @if (busy()) {
+    <p class="busy-note" role="status">Working with the accounts service…</p>
+  }
+  @if (notice(); as note) {
+    <p class="banner" [class.banner-error]="note.tone === 'error'" role="status">{{ note.text }}</p>
+  }
+
+  <div class="desk">
+    <article class="panel">
+      <p class="kicker">Open</p>
+      <h2>New customer</h2>
+      <form class="stack" [formGroup]="createForm" (ngSubmit)="create()">
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" maxlength="30" autocomplete="name" />
+          @if (createForm.controls.name.touched && createForm.controls.name.invalid) {
+            <mat-error>Name must be 5 to 30 characters.</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email" maxlength="80" autocomplete="email" />
+          @if (createForm.controls.email.touched && createForm.controls.email.invalid) {
+            <mat-error>Enter a valid email address.</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Mobile number</mat-label>
+          <input matInput formControlName="mobileNumber" inputmode="numeric" maxlength="10" autocomplete="off" />
+          @if (createForm.controls.mobileNumber.touched && createForm.controls.mobileNumber.invalid) {
+            <mat-error>Enter a 10-digit mobile number.</mat-error>
+          }
+        </mat-form-field>
+        <button mat-flat-button color="primary" type="submit" [disabled]="busy()">Create account</button>
+      </form>
+    </article>
+
+    <article class="panel">
+      <p class="kicker">Retrieve</p>
+      <h2>Find by mobile</h2>
+      <p class="quiet">The account number, type, and branch come back with the customer.</p>
+      <form class="stack" [formGroup]="findForm" (ngSubmit)="fetch()">
+        <mat-form-field appearance="outline">
+          <mat-label>Mobile number</mat-label>
+          <input matInput formControlName="mobileNumber" inputmode="numeric" maxlength="10" autocomplete="off" />
+          @if (findForm.controls.mobileNumber.touched && findForm.controls.mobileNumber.invalid) {
+            <mat-error>Enter a 10-digit mobile number.</mat-error>
+          }
+        </mat-form-field>
+        <button mat-flat-button color="primary" type="submit" [disabled]="busy()">Fetch account</button>
+      </form>
+    </article>
+  </div>
+
+  @if (record(); as customer) {
+    <article class="instrument">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">On file</p>
+          <h2 class="display">{{ customer.name }}</h2>
+          <p class="meta">{{ customer.email }} · {{ customer.mobileNumber }}</p>
+        </div>
+        @if (customer.accountsDto; as details) {
+          <div class="passbook">
+            <div class="passbook-top"><span>VanBank</span><span>Account</span></div>
+            <strong>{{ details.accountNumber }}</strong>
+            <span>{{ details.accountType }} · {{ details.branchAddress }}</span>
+          </div>
+        }
+      </div>
+    </article>
+
+    <article class="panel maintain">
+      <p class="kicker">Maintain</p>
+      <h2>Update this customer</h2>
+      <form class="grid" [formGroup]="editForm" (ngSubmit)="update()">
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" maxlength="30" />
+          @if (editForm.controls.name.touched && editForm.controls.name.invalid) {
+            <mat-error>Name must be 5 to 30 characters.</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email" maxlength="80" />
+          @if (editForm.controls.email.touched && editForm.controls.email.invalid) {
+            <mat-error>Enter a valid email address.</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Mobile number</mat-label>
+          <input matInput formControlName="mobileNumber" inputmode="numeric" maxlength="10" />
+          @if (editForm.controls.mobileNumber.touched && editForm.controls.mobileNumber.invalid) {
+            <mat-error>Enter a 10-digit mobile number.</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Account number</mat-label>
+          <input matInput formControlName="accountNumber" inputmode="numeric" maxlength="10" />
+          @if (editForm.controls.accountNumber.touched && editForm.controls.accountNumber.invalid) {
+            <mat-error>Account number must be 10 digits.</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Account type</mat-label>
+          <input matInput formControlName="accountType" maxlength="30" />
+          @if (editForm.controls.accountType.touched && editForm.controls.accountType.invalid) {
+            <mat-error>Account type is required.</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Branch address</mat-label>
+          <input matInput formControlName="branchAddress" maxlength="120" />
+          @if (editForm.controls.branchAddress.touched && editForm.controls.branchAddress.invalid) {
+            <mat-error>Branch address is required.</mat-error>
+          }
+        </mat-form-field>
+        <button mat-flat-button color="primary" type="submit" [disabled]="busy()">Save changes</button>
+      </form>
+      <div class="danger-zone">
+        @if (!confirmDelete()) {
+          <button mat-stroked-button type="button" class="danger-button" (click)="confirmDelete.set(true)" [disabled]="busy()">
+            Delete customer
+          </button>
+        } @else {
+          <p>Delete this customer and account? This cannot be undone.</p>
+          <div class="row">
+            <button mat-stroked-button type="button" (click)="confirmDelete.set(false)" [disabled]="busy()">Cancel</button>
+            <button mat-flat-button type="button" class="danger-button" (click)="remove()" [disabled]="busy()">Delete</button>
+          </div>
+        }
+      </div>
+    </article>
+  } @else {
+    <section class="waiting">
+      <p class="eyebrow">Nothing open</p>
+      <h2>A customer appears here after you create or fetch one.</h2>
+      <p class="quiet">The account number is assigned by the service. You do not choose it.</p>
+    </section>
+  }
+</section>

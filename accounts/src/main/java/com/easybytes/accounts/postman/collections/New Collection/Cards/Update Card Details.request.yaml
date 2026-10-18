@@ -1,0 +1,20 @@
+$kind: http-request
+name: Update Card Details
+method: PUT
+url: '{{cardsBaseUrl}}/api/update'
+order: 3000
+description: REST API to update card details based on a card number
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "mobileNumber": "9345432123",
+      "cardNumber": "100646930341",
+      "cardType": "Credit Card",
+      "totalLimit": 100000,
+      "amountUsed": 1000,
+      "availableAmount": 99000
+    }

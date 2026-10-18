@@ -1,0 +1,9 @@
+$kind: http-request
+name: Fetch Card Details
+method: GET
+url: '{{cardsBaseUrl}}/api/fetch'
+order: 2000
+description: REST API to fetch card details based on a mobile number
+queryParams:
+  - key: mobileNumber
+    value: '9345432123'

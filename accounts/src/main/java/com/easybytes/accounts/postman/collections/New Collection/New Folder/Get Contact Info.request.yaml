@@ -1,0 +1,6 @@
+$kind: http-request
+name: Get Contact Info
+method: GET
+url: '{{baseUrl}}/api/contact-info'
+order: 7000
+description: Contact Info details that can be reached out in case of any issues

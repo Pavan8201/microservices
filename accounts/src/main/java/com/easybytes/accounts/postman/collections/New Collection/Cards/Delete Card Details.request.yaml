@@ -1,0 +1,9 @@
+$kind: http-request
+name: Delete Card Details
+method: DELETE
+url: '{{cardsBaseUrl}}/api/delete'
+order: 4000
+description: REST API to delete Card details based on a mobile number
+queryParams:
+  - key: mobileNumber
+    value: '9345432123'
